@@ -1,0 +1,830 @@
+/* ============================================
+   Googleフォントを読み込む
+   3種類のフォントをまとめて取得：
+   - Cormorant Garamond（セリフ体・タイトル用）
+   - DM Mono（等幅・ラベルなど）
+   - Inter（サンセリフ体・本文用）
+   ============================================ */
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=DM+Mono:wght@300;400&family=Inter:wght@300;400;500;600&display=swap');
+
+/* ============================================
+   全要素のリセット
+   *（アスタリスク）は「全部の要素」を意味する
+   ::before / ::after は擬似要素（後で追加する装飾）
+   ============================================ */
+*, *::before, *::after {
+  box-sizing: border-box;  /* widthに枠線・余白を含める計算方式（推奨） */
+  margin: 0;               /* ブラウザのデフォルト余白をリセット */
+  padding: 0;              /* 同上 */
+}
+
+/* ============================================
+   body（ページ全体）の基本設定
+   ============================================ */
+body {
+  background: #fff;                            /* 背景色：白 */
+  color: #0a3a52;                              /* 基本の文字色：濃い水色 */
+  font-family: 'Cormorant Garamond', serif;    /* デフォルトフォント（指定なし時に使われる） */
+  overflow-x: hidden;                          /* 横スクロールを隠す（はみ出し防止） */
+}
+
+/* ============================================
+   PROGRESS BAR（画面上部のスクロール進捗バー）
+   JavaScriptで widthを 0%〜100% に変化させる
+   ============================================ */
+#progress-bar {
+  position: fixed;          /* 画面に固定（スクロールしても動かない） */
+  top: 0;                   /* 画面の上端から0px */
+  left: 0;                  /* 画面の左端から0px */
+  height: 2px;              /* 高さ2pxの細いバー */
+  background: linear-gradient(90deg, #5bc8e8, #1a6a8a);  /* 左から右へ水色グラデ */
+  width: 0%;                /* 初期は0%（JSで増やしていく） */
+  z-index: 9999;            /* 重なり順を最前面に（他の要素より上） */
+  transition: width 0.1s;   /* widthが変わる時に0.1秒かけて滑らかに変化 */
+}
+
+/* ============================================
+   NAV（ヘッダーのナビゲーション）
+   ============================================ */
+nav {
+  background: #fff;                  /* 背景色：白 */
+  display: flex;                     /* 子要素を横並びに */
+  justify-content: space-between;    /* 子要素を「両端」に配置（ロゴ左・アイコン右） */
+  align-items: center;               /* 縦方向に中央揃え */
+  padding: 20px 44px;                /* 内側の余白：上下20px・左右44px */
+  border-bottom: 1px solid #e8f0f5;  /* 下に薄い区切り線 */
+  position: relative;                /* 子要素のabsolute配置の基準にする */
+  z-index: 100;                      /* 他のセクションより前面に */
+}
+
+.nav-logo {
+  font-family: 'DM Mono', monospace;  /* 等幅フォントに変更 */
+  font-size: 12px;                    /* 文字サイズ12px */
+  letter-spacing: 0.18em;             /* 文字間隔を広げる */
+  color: #0d4a6a;                     /* 文字色：濃い水色 */
+  text-transform: uppercase;          /* 大文字に変換 */
+  font-weight: 500;                   /* 文字の太さ（中くらい） */
+}
+
+.nav-icons {
+  display: flex;        /* アイコンを横並びに */
+  gap: 14px;            /* アイコン同士の隙間を14px */
+  align-items: center;  /* 縦方向に中央揃え */
+}
+
+.nav-icon {
+  width: 34px;                          /* 横幅34px */
+  height: 34px;                         /* 縦幅34px */
+  border-radius: 50%;                   /* 角丸50%で円形にする */
+  border: 1.5px solid #2a8aaa;          /* 1.5pxの水色枠線 */
+  display: flex;                        /* 中のアイコンを中央配置するため */
+  align-items: center;                  /* 縦中央 */
+  justify-content: center;              /* 横中央 */
+  color: #1a6a8a;                       /* アイコンの色 */
+  text-decoration: none;                /* aタグの下線を消す */
+  font-size: 14px;                      /* アイコンサイズ */
+  background: #fff;                     /* 背景色：白 */
+  transition: all 0.2s;                 /* 全プロパティの変化を0.2秒で滑らかに */
+}
+
+.nav-icon:hover {                       /* マウスが乗った時 */
+  background: #2a8aaa;                  /* 背景色を水色に */
+  color: #fff;                          /* 文字色を白に */
+  transform: scale(1.12);               /* 1.12倍に拡大 */
+}
+
+.nav-q {
+  font-family: 'DM Mono', monospace;  /* 等幅フォント */
+  font-size: 11px;                    /* 文字サイズ11px */
+  font-weight: 600;                   /* 文字の太さ（やや太め） */
+}
+
+/* ============================================
+   HERO（表紙：左にタイトル・右に写真）
+   ============================================ */
+.hero {
+  position: relative;                /* 中のabsolute要素の基準 */
+  width: 100%;                       /* 横幅いっぱい */
+  min-height: 500px;                 /* 最低でも500pxの高さ */
+  padding: 60px 44px;                /* 内側余白：上下60px・左右44px */
+  display: flex;                     /* 左右に分割するため横並びに */
+  align-items: center;               /* 縦中央揃え */
+  gap: 40px;                         /* 左テキストと右写真の間に40px */
+  background: linear-gradient(135deg, #f5fafc 0%, #e8f4f9 100%);  /* 斜め方向の薄いグラデ */
+  overflow: hidden;                  /* はみ出した要素を隠す */
+}
+
+/* 背景に配置する縦書きの装飾テキスト */
+.hero-bg-text {
+  position: absolute;                /* 親(.hero)を基準に自由配置 */
+  font-family: 'DM Mono', monospace; /* 等幅フォント */
+  color: #c4e0ed;                    /* 薄い水色（控えめに） */
+  font-size: 10px;                   /* 小さめサイズ */
+  letter-spacing: 0.3em;             /* 文字間隔を広げる */
+  writing-mode: vertical-rl;         /* 縦書き（右から左に並ぶ） */
+}
+
+.hero-bg-text.left {
+  left: 14px;                        /* 親の左端から14px */
+  top: 50%;                          /* 親の高さの50%の位置 */
+  transform: translateY(-50%);       /* 自分の高さの半分上にズラして縦中央に */
+}
+
+.hero-bg-text.right {
+  right: 14px;                       /* 親の右端から14px */
+  top: 50%;                          /* 親の高さの50%の位置 */
+  transform: translateY(-50%);       /* 自分の高さの半分上にズラして縦中央に */
+}
+
+/* 左側（タイトルエリア） */
+.hero-left {
+  flex: 1;          /* 余った空間を全部使う（伸び縮みする） */
+  z-index: 2;       /* 背景テキストより前面に */
+}
+
+/* タイトルの上の小さなタグ */
+.hero-tag {
+  font-family: 'DM Mono', monospace;       /* 等幅フォント */
+  font-size: 10px;                         /* 文字サイズ10px */
+  letter-spacing: 0.22em;                  /* 文字間隔広め */
+  color: #1a6a8a;                          /* 文字色：水色 */
+  text-transform: uppercase;               /* 大文字変換 */
+  margin-bottom: 24px;                     /* 下に24pxの余白 */
+  display: flex;                           /* 横線とテキストを横並びに */
+  align-items: center;                     /* 縦中央揃え */
+  gap: 12px;                               /* 横線とテキストの隙間 */
+  opacity: 0;                              /* 最初は透明 */
+  animation: fadeUp 0.8s 0.1s ease both;   /* 0.1秒後から0.8秒かけてフワッと出現 */
+  font-weight: 500;                        /* 文字の太さ */
+}
+
+/* タグの左に表示される短い横線（::beforeで作る） */
+.hero-tag::before {
+  content: '';            /* 中身は空でOK（線として表示するだけ） */
+  display: block;         /* ブロック要素として扱う */
+  width: 28px;            /* 横線の長さ */
+  height: 1px;            /* 線の太さ */
+  background: #1a6a8a;    /* 線の色 */
+}
+
+/* メインタイトル */
+.hero h1 {
+  font-family: 'Cormorant Garamond', serif;  /* セリフ体 */
+  font-weight: 400;                           /* 通常の太さ */
+  font-size: clamp(36px, 5.5vw, 60px);        /* 画面幅に応じて36px〜60pxで自動変化 */
+  color: #0a3a52;                             /* 文字色：濃い水色 */
+  letter-spacing: -0.01em;                    /* 文字間隔をわずかに詰める */
+  line-height: 1.1;                           /* 行の高さ（1.1倍） */
+  opacity: 0;                                 /* 最初は透明 */
+  animation: fadeUp 0.8s 0.25s ease both;     /* 上のタグより少し遅れて出現 */
+}
+
+/* タイトル内の斜体部分 */
+.hero h1 em {
+  font-style: italic;   /* 斜体 */
+  color: #2a8aaa;       /* 斜体だけ違う色で目立たせる */
+  font-weight: 300;     /* 細めに */
+}
+
+/* 説明文 */
+.hero-sub {
+  font-family: 'Inter', sans-serif;        /* サンセリフ体 */
+  font-weight: 400;                        /* 通常の太さ */
+  font-size: 14px;                         /* 文字サイズ */
+  color: #3a6a7a;                          /* 文字色：くすんだ水色 */
+  margin-top: 18px;                        /* 上に余白 */
+  line-height: 1.7;                        /* 読みやすい行間 */
+  max-width: 440px;                        /* 最大幅を制限して読みやすく */
+  opacity: 0;                              /* 最初は透明 */
+  animation: fadeUp 0.8s 0.4s ease both;   /* タイトルより遅れて出現 */
+}
+
+/* スキルタグ群 */
+.hero-meta {
+  display: flex;                            /* 横並び */
+  gap: 8px;                                 /* タグ同士の隙間 */
+  margin-top: 28px;                         /* 上に余白 */
+  flex-wrap: wrap;                          /* 入りきらない時は次の行に折り返す */
+  opacity: 0;                               /* 最初は透明 */
+  animation: fadeUp 0.8s 0.55s ease both;   /* さらに遅れて出現 */
+}
+
+.hero-meta span {
+  font-family: 'DM Mono', monospace;             /* 等幅フォント */
+  font-size: 9px;                                /* 小さめサイズ */
+  padding: 5px 11px;                             /* 内側の余白 */
+  border: 1px solid rgba(42, 122, 154, 0.3);     /* 半透明の枠線 */
+  color: #1a6a8a;                                /* 文字色：水色 */
+  letter-spacing: 0.05em;                        /* わずかに文字間隔広く */
+  background: #fff;                              /* 背景：白 */
+}
+
+/* ============================================
+   楕円写真エリア（右側）
+   ============================================ */
+.hero-right {
+  flex: 0 0 50%;            /* 横幅50%で固定（伸び縮みしない） */
+  display: flex;            /* 中の要素を配置するため */
+  align-items: center;      /* 縦中央 */
+  justify-content: center;  /* 横中央 */
+  position: relative;       /* 中のドット飾りの基準 */
+  z-index: 2;               /* 背景テキストより前面に */
+}
+
+/* 写真の枠（楕円） */
+.photo-frame {
+  position: relative;                 /* 中のshine要素の基準 */
+  width: 100%;                        /* 親の幅いっぱい */
+  max-width: 460px;                   /* 最大460pxまで */
+  aspect-ratio: 5/4;                  /* 縦横比を5:4で維持 */
+  border-radius: 50% / 50%;           /* 楕円形にする（横半径/縦半径） */
+  overflow: hidden;                   /* はみ出した写真を切り抜く */
+  box-shadow: 0 20px 60px rgba(20, 80, 110, 0.22), 0 4px 12px rgba(20, 80, 110, 0.1);
+                                      /* 影を2重にかけて立体感 */
+  opacity: 0;                         /* 最初は透明 */
+  animation: fadeUp 1s 0.35s ease both;  /* 1秒かけて出現 */
+}
+
+.photo-frame img {
+  width: 100%;                              /* 親いっぱい */
+  height: 100%;                             /* 親いっぱい */
+  object-fit: cover;                        /* 比率を保ったまま枠いっぱいに切り抜き */
+  display: block;                           /* 余白を消す */
+  transition: transform 10s ease;           /* ホバー時の拡大を10秒かけてゆっくり */
+  filter: saturate(1.05) contrast(1.02);    /* 彩度・コントラストを微増 */
+}
+
+.photo-frame:hover img {
+  transform: scale(1.06);   /* マウスを乗せると1.06倍にゆっくり拡大 */
+}
+
+/* ふんわり浮かぶドット飾り（写真の右上） */
+.photo-dots {
+  position: absolute;        /* 親(hero-right)を基準に配置 */
+  width: 80px;               /* 横幅 */
+  height: 80px;              /* 縦幅 */
+  top: -20px;                /* 親の上端より20px上にはみ出す */
+  right: -20px;              /* 親の右端より20px右にはみ出す */
+  background-image: radial-gradient(#2a8aaa 1.5px, transparent 1.5px);
+                             /* 小さな円を繰り返してドット模様に */
+  background-size: 12px 12px;   /* ドットの間隔 */
+  opacity: 0.5;                 /* 半透明 */
+  pointer-events: none;         /* マウスクリック等を受け付けない */
+  animation: fadeUp 1.2s 0.6s ease both;  /* ゆっくり出現 */
+}
+
+/* 左下のドット飾り（同じスタイルを位置だけ変更） */
+.photo-dots.bl {
+  top: auto;       /* topの指定を解除 */
+  right: auto;     /* rightの指定を解除 */
+  bottom: -16px;   /* 親の下端より16px下にはみ出す */
+  left: -16px;     /* 親の左端より16px左にはみ出す */
+  width: 60px;     /* 少し小さめに */
+  height: 60px;    /* 少し小さめに */
+}
+
+/* キラッと光るアクセント（写真の右上で点滅） */
+.photo-shine {
+  position: absolute;                /* 親(photo-frame)を基準 */
+  width: 14px;                       /* 横幅 */
+  height: 14px;                      /* 縦幅 */
+  background: #fff;                  /* 背景：白 */
+  border-radius: 50%;                /* 円形 */
+  top: 10%;                          /* 親の上から10%の位置 */
+  right: 14%;                        /* 親の右から14%の位置 */
+  box-shadow: 0 0 16px rgba(255, 255, 255, 0.9);  /* 周りがボワッと光る */
+  opacity: 0;                        /* 最初は透明 */
+  animation: shine 4s 1s ease-in-out infinite;    /* 4秒周期で無限に点滅 */
+  pointer-events: none;              /* マウス操作を受け付けない */
+  z-index: 3;                        /* 写真より前面に */
+}
+
+/* @keyframes：アニメーションの動きを定義 */
+@keyframes shine {
+  0%, 100% { opacity: 0; transform: scale(0.6); }   /* 開始と終了：消える */
+  50%      { opacity: 0.8; transform: scale(1); }    /* 真ん中：光る */
+}
+
+/* ============================================
+   波区切り（セクション間のSVG装飾）
+   ============================================ */
+.wave-div {
+  display: block;       /* インラインタグ(span)をブロックとして扱う */
+  width: 100%;          /* 横幅いっぱい */
+  line-height: 0;       /* 余計な隙間を消す */
+}
+
+.wave-div svg {
+  display: block;       /* 余白を消す */
+  width: 100%;          /* 横幅いっぱい */
+}
+
+/* ============================================
+   各セクション共通のタイトル部分
+   ============================================ */
+.sec-title {
+  text-align: center;       /* 中央寄せ */
+  margin-bottom: 36px;      /* 下に36pxの余白 */
+}
+
+.sec-title i {              /* アイコン */
+  font-size: 28px;          /* アイコンサイズ */
+  color: #1a6a8a;           /* アイコン色 */
+  display: block;           /* 改行させる（下にテキストが来るように） */
+  margin-bottom: 8px;       /* 下に余白 */
+}
+
+.sec-title h2 {
+  font-family: 'DM Mono', monospace;   /* 等幅フォント */
+  font-size: 12px;                     /* 小さめサイズ */
+  letter-spacing: 0.28em;              /* 文字間隔を広く */
+  text-transform: uppercase;           /* 大文字変換 */
+  color: #1a6a8a;                      /* 水色 */
+  font-weight: 600;                    /* やや太め */
+}
+
+/* ============================================
+   WORKS（チェキ風カード3枚並び）
+   ============================================ */
+.works-wrap {
+  background: #fff;        /* 背景：白 */
+  padding: 64px 44px;      /* 内側余白：上下64px・左右44px */
+}
+
+.works-grid {
+  display: grid;                              /* Gridレイアウトを使う */
+  grid-template-columns: repeat(3, 1fr);      /* 3列・均等幅 */
+  gap: 30px;                                  /* カード間の隙間 */
+}
+
+/* チェキ1枚 */
+.cheki {
+  background: #fff;                /* 背景：白 */
+  padding: 11px 11px 52px;         /* 下側だけ余白多め（文字スペース） */
+  cursor: pointer;                 /* マウスポインタが手の形に */
+  position: relative;              /* テープや矢印の配置基準 */
+  box-shadow: 2px 5px 18px rgba(30, 90, 120, 0.15), 0 0 0 0.5px rgba(30, 90, 120, 0.08);
+                                   /* 立体的な影 */
+  transition: transform 0.4s cubic-bezier(.2, .8, .3, 1.1), box-shadow 0.4s;
+                                   /* cubic-bezier：独自の動き方カーブ */
+}
+
+/* :nth-child(N)：N番目の子要素を狙う */
+.cheki:nth-child(1) {
+  transform: rotate(-2.2deg);   /* 1枚目を少し左に傾ける */
+}
+
+.cheki:nth-child(2) {
+  transform: rotate(1.1deg);    /* 2枚目を少し右に傾ける */
+}
+
+.cheki:nth-child(3) {
+  transform: rotate(-0.7deg);   /* 3枚目を少し左に傾ける */
+}
+
+.cheki:hover {
+  transform: rotate(0deg) scale(1.07) translateY(-8px) !important;
+                                /* 傾きを戻して拡大・上に浮く */
+                                /* !importantは上の傾きCSSを上書きするため */
+  box-shadow: 6px 14px 36px rgba(30, 90, 120, 0.22);   /* 影を強調 */
+  z-index: 10;                  /* ホバー中のカードを最前面に */
+}
+
+/* チェキの上にあるテープ風装飾 */
+.cheki-tape {
+  position: absolute;                        /* 親(cheki)を基準 */
+  top: -7px;                                 /* チェキの上に少しはみ出す */
+  left: 50%;                                 /* 親の中央 */
+  transform: translateX(-50%);               /* 自分の幅の半分左にズラして中央に */
+  width: 36px;                               /* 横幅 */
+  height: 12px;                              /* 縦幅 */
+  background: rgba(210, 235, 248, 0.92);     /* 半透明の水色 */
+  border: 1px solid rgba(42, 122, 154, 0.18); /* 薄い枠線 */
+}
+
+/* チェキ内のプレースホルダー画像エリア */
+.cheki-ph {
+  width: 100%;                  /* 横幅いっぱい */
+  aspect-ratio: 4/3;            /* 縦横比4:3 */
+  background: #d8eef7;          /* 背景：薄い水色 */
+  display: flex;                /* 中身を配置するため */
+  flex-direction: column;       /* 縦並びに */
+  overflow: hidden;             /* はみ出しを隠す */
+}
+
+/* ブラウザ風のバー（赤・黄・緑の信号機ドット） */
+.ph-bar {
+  background: #2a8aaa;       /* 背景：水色 */
+  height: 18px;              /* バーの高さ */
+  display: flex;             /* 中身を横並びに */
+  align-items: center;       /* 縦中央 */
+  padding: 0 7px;            /* 左右に余白 */
+  gap: 4px;                  /* ドット間の隙間 */
+  flex-shrink: 0;            /* 縮まないようにする */
+}
+
+.ph-dot {
+  width: 5px;                /* 横幅 */
+  height: 5px;               /* 縦幅 */
+  border-radius: 50%;        /* 円形 */
+}
+
+.ph-url {
+  flex: 1;                              /* 余ったスペースを全部使う */
+  background: rgba(255, 255, 255, 0.22); /* 半透明の白 */
+  border-radius: 2px;                   /* わずかな角丸 */
+  height: 10px;                         /* 高さ */
+  margin: 0 5px;                        /* 左右に余白 */
+}
+
+.ph-body {
+  flex: 1;                  /* 残りの縦スペースを使う */
+  padding: 8px;             /* 内側余白 */
+  display: flex;            /* 中身を配置するため */
+  flex-direction: column;   /* 縦並びに */
+  gap: 5px;                 /* 各要素の隙間 */
+}
+
+.ph-hero {
+  background: #b4d8ec;       /* 背景：水色 */
+  border-radius: 2px;        /* わずかな角丸 */
+  height: 36%;               /* 親の36%の高さ */
+  display: flex;             /* 中のテキストを配置するため */
+  align-items: center;       /* 縦中央 */
+  justify-content: center;   /* 横中央 */
+}
+
+.ph-lbl {
+  font-family: 'DM Mono', monospace;   /* 等幅フォント */
+  font-size: 6px;                      /* とても小さく */
+  color: #0d4a6a;                      /* 文字色：濃い水色 */
+  letter-spacing: 0.1em;               /* 文字間隔広く */
+  text-transform: uppercase;           /* 大文字変換 */
+  font-weight: 600;                    /* やや太め */
+}
+
+/* 横棒（テキストっぽい飾り） */
+.ph-row {
+  background: #c4e2f0;       /* 背景：薄い水色 */
+  border-radius: 2px;        /* わずかな角丸 */
+  height: 9px;               /* 高さ */
+}
+
+.ph-row.s {
+  width: 60%;                /* 短いバージョン */
+}
+
+.ph-row.xs {
+  width: 38%;                /* もっと短いバージョン */
+}
+
+.ph-cards {
+  display: flex;       /* 横並び */
+  gap: 4px;            /* カード間の隙間 */
+}
+
+.ph-card {
+  background: #b8d8e8;       /* 背景：水色 */
+  border-radius: 2px;        /* わずかな角丸 */
+  flex: 1;                   /* 均等幅 */
+  height: 24px;              /* 高さ */
+}
+
+/* チェキ下のラベル「01 — API」 */
+.cheki-label {
+  font-family: 'DM Mono', monospace;   /* 等幅フォント */
+  font-size: 9px;                      /* 小さめ */
+  letter-spacing: 0.1em;               /* 文字間隔広く */
+  color: #5a8a9a;                      /* 文字色：くすんだ水色 */
+  text-align: center;                  /* 中央寄せ */
+  margin-top: 8px;                     /* 上に余白 */
+  text-transform: uppercase;           /* 大文字変換 */
+  font-weight: 600;                    /* やや太め */
+}
+
+/* チェキ下のタイトル「Tidal — 在庫管理 API」 */
+.cheki-title {
+  font-family: 'Cormorant Garamond', serif;   /* セリフ体 */
+  font-weight: 400;                            /* 通常の太さ */
+  font-size: 14px;                             /* 文字サイズ */
+  color: #0a3a52;                              /* 文字色：濃い水色 */
+  text-align: center;                          /* 中央寄せ */
+  margin-top: 2px;                             /* 上にわずかな余白 */
+}
+
+/* 技術スタックタグの並び */
+.cheki-stk {
+  display: flex;             /* 横並び */
+  justify-content: center;   /* 中央寄せ */
+  gap: 4px;                  /* タグ間の隙間 */
+  margin-top: 5px;           /* 上に余白 */
+  flex-wrap: wrap;           /* 入りきらない時は折り返す */
+}
+
+.stk {
+  font-family: 'DM Mono', monospace;             /* 等幅フォント */
+  font-size: 8px;                                /* 小さめ */
+  padding: 2px 6px;                              /* 内側余白 */
+  border: 1px solid rgba(42, 122, 154, 0.3);     /* 半透明の枠線 */
+  color: #2a7a9a;                                /* 文字色：水色 */
+  font-weight: 500;                              /* 中くらいの太さ */
+}
+
+/* チェキ右下の矢印 */
+.cheki-arrow {
+  position: absolute;        /* 親(cheki)を基準 */
+  bottom: 10px;              /* 親の下端から10px */
+  right: 11px;               /* 親の右端から11px */
+  font-size: 12px;           /* 矢印サイズ */
+  color: #7aaec8;            /* 矢印色：薄い水色 */
+  transition: color 0.3s, transform 0.3s;   /* 色と動きを0.3秒で滑らかに */
+}
+
+/* 親のchekiにホバーした時の矢印の動き */
+.cheki:hover .cheki-arrow {
+  color: #1a6a8a;                       /* 色を濃く */
+  transform: translate(3px, -3px);      /* 右上に3pxずつ動く */
+}
+
+/* ============================================
+   SKILLS（スキル一覧）
+   ============================================ */
+.skills-wrap {
+  background: #d6edf7;       /* 背景：水色 */
+  padding: 64px 44px;        /* 内側余白 */
+}
+
+.skills-grid {
+  display: grid;                                            /* グリッドレイアウト */
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+                                                            /* 最小150pxで、画面幅に応じて自動で列数調整 */
+  gap: 1px;                                                 /* 1pxの隙間 → 背景色が見えて区切り線になる */
+  background: rgba(58, 154, 184, 0.2);                      /* 隙間に見える線の色 */
+  margin-top: 8px;                                          /* 上に余白 */
+}
+
+.sk {
+  background: #fff;             /* 背景：白 */
+  padding: 22px 18px;           /* 内側余白 */
+  transition: background 0.3s;  /* ホバー時の色変化を滑らかに */
+}
+
+.sk:hover {
+  background: #f0f9fc;          /* ホバーで少し色を変える */
+}
+
+.sk h3 {
+  font-family: 'DM Mono', monospace;   /* 等幅フォント */
+  font-size: 10px;                     /* 小さめ */
+  letter-spacing: 0.15em;              /* 文字間隔広く */
+  text-transform: uppercase;           /* 大文字変換 */
+  color: #1a6a8a;                      /* 文字色：水色 */
+  margin-bottom: 10px;                 /* 下に余白 */
+  font-weight: 600;                    /* やや太め */
+}
+
+.tags {
+  display: flex;       /* タグを横並び */
+  flex-wrap: wrap;     /* 折り返しOK */
+  gap: 5px;            /* タグ間の隙間 */
+}
+
+.tg {
+  font-family: 'DM Mono', monospace;              /* 等幅フォント */
+  font-size: 10px;                                /* 小さめ */
+  padding: 4px 9px;                               /* 内側余白 */
+  border: 1px solid rgba(42, 122, 154, 0.35);     /* 半透明の枠線 */
+  color: #0d4a6a;                                 /* 文字色：濃い水色 */
+  font-weight: 500;                               /* 中くらいの太さ */
+}
+
+/* ============================================
+   ABOUT（自己紹介セクション）
+   ============================================ */
+.about-wrap {
+  background: #fff;          /* 背景：白 */
+  padding: 64px 44px;        /* 内側余白 */
+}
+
+.about-grid {
+  display: flex;             /* 横並び（写真とテキスト） */
+  gap: 80px;                 /* 写真とテキストの間に44pxの隙間 */
+  align-items: flex-start;   /* 上揃え（写真とテキストの上端が揃う） */
+  max-width: 900px;     /* ← 追加：最大幅を900pxに制限 */
+  margin: 0 auto;       /* ← 追加：横中央寄せ */
+}
+
+/* 丸い顔写真 */
+.about-photo {
+  flex-shrink: 0;              /* 縮まないようにする（横幅を守る） */
+  width: 140px;                /* 横幅 */
+  height: 140px;               /* 縦幅 */
+  border-radius: 50%;          /* 完全な円形 */
+  background: #d0e8f5;         /* 背景色：薄い水色 */
+  border: 3px solid #2a8aaa;   /* 水色の枠線 */
+  overflow: hidden;            /* はみ出した画像を切り抜く */
+  display: flex;               /* プレースホルダーを中央配置するため */
+  align-items: center;         /* 縦中央 */
+  justify-content: center;     /* 横中央 */
+}
+
+.about-photo img {
+  width: 100%;                 /* 親いっぱい */
+  height: 100%;                /* 親いっぱい */
+  object-fit: cover;           /* 比率保ったまま枠いっぱいに */
+}
+
+/* 写真がない時のプレースホルダー */
+.about-photo-ph {
+  font-family: 'DM Mono', monospace;   /* 等幅フォント */
+  font-size: 10px;                     /* 小さめ */
+  color: #1a6a8a;                      /* 文字色：水色 */
+  letter-spacing: 0.1em;               /* 文字間隔広く */
+  text-align: center;                  /* 中央寄せ */
+  line-height: 1.6;                    /* 行間 */
+}
+
+.about-text-block {
+  flex: 1;                  /* 残りの幅を全部使う */
+}
+
+.about-name {
+  font-family: 'Cormorant Garamond', serif;   /* セリフ体 */
+  font-weight: 400;                            /* 通常の太さ */
+  font-size: 24px;                             /* 大きめ */
+  color: #0a3a52;                              /* 文字色：濃い水色 */
+  margin-bottom: 14px;                         /* 下に余白 */
+}
+
+.about-body {
+  font-weight: 400;       /* 通常の太さ */
+  font-size: 15px;        /* 文字サイズ */
+  line-height: 1.88;      /* 読みやすい広めの行間 */
+  color: #1a4a5a;         /* 文字色 */
+}
+
+/* p + p：pタグの直後にあるpタグ（2個目以降の段落） */
+.about-body p + p {
+  margin-top: 11px;       /* 段落間に余白 */
+}
+
+.about-meta {
+  display: flex;          /* 横並び */
+  flex-wrap: wrap;        /* 折り返しOK */
+  gap: 10px;              /* タグ間の隙間 */
+  margin-top: 18px;       /* 上に余白 */
+}
+
+.meta-tag {
+  font-family: 'DM Mono', monospace;             /* 等幅フォント */
+  font-size: 10px;                               /* 小さめ */
+  padding: 6px 13px;                             /* 内側余白 */
+  border: 1px solid rgba(42, 122, 154, 0.35);    /* 半透明の枠線 */
+  color: #0d4a6a;                                /* 文字色：濃い水色 */
+  background: #f5fafd;                           /* 背景：とても薄い水色 */
+}
+
+/* ============================================
+   CONTACT（連絡先・フッター）
+   ============================================ */
+.contact-wrap {
+  background: #d6edf7;       /* 背景：水色 */
+  padding: 60px 44px 56px;   /* 上60px・左右44px・下56px */
+}
+
+.contact-row {
+  display: flex;             /* 連絡先を横並び */
+  justify-content: center;   /* 横中央寄せ */
+  gap: 56px;                 /* 連絡先間の隙間 */
+  align-items: flex-start;   /* 上揃え */
+  flex-wrap: wrap;           /* 折り返しOK */
+  margin-top: 8px;           /* 上に余白 */
+}
+
+.contact-item {
+  text-align: center;        /* 中央寄せ */
+}
+
+/* 連絡先の丸アイコン */
+.c-icon-circle {
+  width: 58px;                 /* 横幅 */
+  height: 58px;                /* 縦幅 */
+  border-radius: 50%;          /* 円形 */
+  border: 2px solid #1a6a8a;   /* 太めの水色枠線 */
+  display: flex;               /* 中のアイコンを中央配置 */
+  align-items: center;         /* 縦中央 */
+  justify-content: center;     /* 横中央 */
+  margin: 0 auto 10px;         /* 横中央寄せ + 下に10pxの余白 */
+  color: #1a6a8a;              /* アイコン色 */
+  font-size: 22px;             /* アイコンサイズ */
+  background: #fff;            /* 背景：白 */
+  transition: all 0.2s;        /* ホバー時の変化を滑らかに */
+}
+
+/* 親のcontact-itemにホバーした時のアイコンの動き */
+.contact-item:hover .c-icon-circle {
+  background: #1a6a8a;         /* 背景を濃い水色に */
+  color: #fff;                 /* アイコンを白に */
+  transform: scale(1.08);      /* 1.08倍に拡大 */
+}
+
+.c-lbl {
+  font-family: 'DM Mono', monospace;   /* 等幅フォント */
+  font-size: 10px;                     /* 小さめ */
+  letter-spacing: 0.14em;              /* 文字間隔広く */
+  text-transform: uppercase;           /* 大文字変換 */
+  color: #1a6a8a;                      /* 文字色：水色 */
+  margin-bottom: 4px;                  /* 下に余白 */
+  font-weight: 600;                    /* やや太め */
+}
+
+.contact-item a {
+  font-family: 'DM Mono', monospace;   /* 等幅フォント */
+  font-size: 11px;                     /* 文字サイズ */
+  color: #0d4a6a;                      /* 文字色：濃い水色 */
+  text-decoration: underline;          /* 下線あり */
+  text-underline-offset: 3px;          /* 下線を文字から3px離す */
+}
+
+.contact-note {
+  text-align: center;                  /* 中央寄せ */
+  margin-top: 28px;                    /* 上に余白 */
+  font-family: 'DM Mono', monospace;   /* 等幅フォント */
+  font-size: 10px;                     /* 小さめ */
+  color: #3a7a94;                      /* 文字色：くすんだ水色 */
+  letter-spacing: 0.05em;              /* 文字間隔少し広く */
+}
+
+.copyright {
+  text-align: center;                  /* 中央寄せ */
+  margin-top: 28px;                    /* 上に余白 */
+  font-family: 'DM Mono', monospace;   /* 等幅フォント */
+  font-size: 10px;                     /* 小さめ */
+  color: #5a9ab2;                      /* 文字色：くすんだ水色 */
+  letter-spacing: 0.08em;              /* 文字間隔広く */
+}
+
+/* ============================================
+   スクロール時の入場アニメーション
+   JavaScriptで .visible クラスが付くと animation 発火
+   ============================================ */
+.reveal {
+  opacity: 0;                      /* 最初は透明 */
+  transform: translateY(32px);     /* 32px下にズレた状態 */
+  transition: opacity 0.7s ease, transform 0.7s ease;
+                                   /* 透明度と位置の変化を0.7秒で滑らかに */
+}
+
+.reveal.visible {                  /* JSで .visible が付いた時 */
+  opacity: 1;                      /* 不透明に */
+  transform: translateY(0);        /* 元の位置に */
+}
+
+/* ============================================
+   @keyframes：アニメーションの動きを定義
+   名前 fadeUp で「下からフワッと出現」を定義
+   ============================================ */
+@keyframes fadeUp {
+  from {
+    opacity: 0;                  /* 開始：透明 */
+    transform: translateY(20px); /* 開始：20px下にズレた状態 */
+  }
+  to {
+    opacity: 1;                  /* 終了：不透明に */
+    transform: translateY(0);    /* 終了：元の位置に */
+  }
+}
+
+/* ============================================
+   レスポンシブ対応（スマホ向け）
+   @media：画面幅に応じてスタイルを切り替える
+   max-width: 680px = 画面幅が680px以下の時だけ適用
+   ============================================ */
+@media (max-width: 680px) {
+
+  .hero {
+    flex-direction: column;     /* 横並びから縦並びに変更 */
+    text-align: center;         /* テキスト中央寄せ */
+    padding: 40px 24px;         /* 内側余白を小さめに */
+  }
+
+  .hero-tag {
+    justify-content: center;    /* スマホでは中央寄せに */
+  }
+
+  .hero-right {
+    flex: 0 0 auto;             /* 幅固定を解除 */
+    width: 75%;                 /* 写真エリアの幅を75%に */
+  }
+
+  .works-grid {
+    grid-template-columns: 1fr; /* 3列から1列に */
+    gap: 40px;                  /* カード間の隙間を広めに */
+  }
+
+  .about-grid {
+    flex-direction: column;     /* 写真とテキストを縦並びに */
+    align-items: center;        /* 中央揃え */
+    text-align: center;         /* テキスト中央寄せ */
+  }
+}

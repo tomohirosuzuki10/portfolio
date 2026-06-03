@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<!-- ↑ 「これはHTML5の文書です」とブラウザに宣言（必須のおまじない） -->
+
+<html lang="ja">
+<!-- ↑ ページ全体を囲む。lang="ja"で「日本語のページ」と伝える -->
+
+<head>
+  <!-- ↓ head の中は「ページの設定情報」。画面には表示されないけど大事 -->
+
+  <meta charset="UTF-8">
+  <!-- ↑ 文字コードをUTF-8に指定。これがないと日本語が文字化けする -->
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- ↑ スマホ対応のおまじない。これがないとスマホで文字が小さくなる -->
+
+  <title>Tomo's Portfolio</title>
+  <!-- ↑ ブラウザのタブに表示される名前。検索結果にも出る -->
+
+  <!-- Tabler Icons を読み込む -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+  <!-- ↑ アイコンフォントをネット越しに読み込み。<i class="ti ti-...">が使えるようになる -->
+
+  <!-- style.css を読み込む -->
+  <link rel="stylesheet" href="style.css">
+  <!-- ↑ 自分で書いたCSSファイルを読み込み。これがないと装飾が消える -->
+
+</head>
+
+<body>
+<!-- ↑ ここから実際に画面に表示される中身 -->
+
+<div id="progress-bar"></div>
+<!-- ↑ スクロール進捗バーの置き場所。中身は空。JSがwidthを0%→100%に変える -->
+
+
+<!-- ===== NAV ===== -->
+<nav>
+<!-- ↑ ナビゲーション領域。ロゴとアイコンを置く -->
+
+  <span class="nav-logo">Tomo's Portfolio</span>
+  <!-- ↑ サイトのロゴ（テキスト）。spanはインライン要素 -->
+
+  <div class="nav-icons">
+  <!-- ↑ アイコンをまとめる箱。CSSで横並びにする -->
+
+    <a class="nav-icon" href="https://github.com/" target="_blank" title="GitHub">
+    <!-- ↑ GitHubへのリンク。target="_blank"で新しいタブで開く。titleはマウス乗せた時の説明 -->
+      <i class="ti ti-brand-github"></i>
+      <!-- ↑ Tabler Iconsの GitHub アイコン -->
+    </a>
+
+    <a class="nav-icon" href="https://twitter.com/" target="_blank" title="Twitter">
+      <i class="ti ti-brand-twitter"></i>
+    </a>
+    <!-- ↑ 同様にTwitterリンク -->
+
+  </div>
+</nav>
+
+
+<main>
+<!-- ↑ メインコンテンツの開始。1ページに1個だけ使う -->
+
+
+  <!-- ===== 表紙（HERO） ===== -->
+  <section class="hero" aria-label="ヒーロー">
+  <!-- ↑ Heroセクション。aria-labelはスクリーンリーダー（音声読み上げ）用の名前 -->
+
+    <span class="hero-bg-text left">PORTFOLIO ・ 2026</span>
+    <!-- ↑ 左端の縦書き装飾テキスト -->
+
+    <span class="hero-bg-text right">TOMO ・ BACKEND</span>
+    <!-- ↑ 右端の縦書き装飾テキスト -->
+
+    <div class="hero-left">
+    <!-- ↑ 左側のタイトルエリア -->
+
+      <h1>This is Tomohiro Suzuki<br>Portfolio <em>Website.</em></h1>
+      <!-- ↑ 一番大きい見出し。<br>で改行、<em>で「Website.」だけ斜体に -->
+
+    </div>
+
+    <div class="hero-right">
+    <!-- ↑ 右側の写真エリア -->
+
+      <span class="photo-dots"></span>
+      <!-- ↑ 右上のドット飾り（中身は空。CSSでドット模様を描画） -->
+
+      <div class="photo-frame">
+      <!-- ↑ 楕円の写真フレーム -->
+
+        <img src="photo.jpg" alt="Tomohiro Suzuki">
+        <!-- ↑ メイン写真。altは画像が出ない時の説明＆スクリーンリーダー用 -->
+
+        <span class="photo-shine"></span>
+        <!-- ↑ キラッと光るアクセント（CSSで点滅アニメ） -->
+
+      </div>
+
+      <span class="photo-dots bl"></span>
+      <!-- ↑ 左下のドット飾り。「bl」クラスで位置だけ変更 -->
+
+    </div>
+  </section>
+
+
+  <!-- 区切り: Hero -> Works -->
+  <span class="wave-div">
+  <!-- ↑ セクション間の波型区切り -->
+
+    <svg viewBox="0 0 1440 52" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" height="52">
+    <!-- ↑ SVG（ベクター画像）で波の形を描画。viewBoxは描画範囲 -->
+
+      <path d="M0,52 C400,0 1000,52 1440,12 L1440,52 Z" fill="#fff"/>
+      <!-- ↑ pathで波の曲線を定義。fillは塗りつぶし色 -->
+
+    </svg>
+  </span>
+
+
+  <!-- ===== WORKS（作品一覧） ===== -->
+  <section class="works-wrap reveal" aria-label="Works">
+  <!-- ↑ Works セクション。「reveal」クラスはスクロールで出現するアニメ用 -->
+
+    <div class="sec-title">
+    <!-- ↑ セクションのタイトル部分（アイコン+見出し） -->
+
+      <i class="ti ti-layout-grid" aria-hidden="true"></i>
+      <!-- ↑ グリッドアイコン。aria-hiddenで読み上げから除外（装飾だから） -->
+
+      <h2>Works</h2>
+      <!-- ↑ 中見出し -->
+
+    </div>
+
+    <div class="works-grid">
+    <!-- ↑ チェキ3枚を並べるグリッド -->
+
+
+      <!-- 01 -->
+      <div class="cheki">
+      <!-- ↑ 1枚目のチェキカード -->
+
+        <div class="cheki-tape"></div>
+        <!-- ↑ 上端のテープ風装飾 -->
+
+        <div class="cheki-ph">
+        <!-- ↑ ブラウザ画面風のプレースホルダー -->
+
+          <div class="ph-bar">
+          <!-- ↑ ブラウザの上のバー部分 -->
+
+            <div class="ph-dot" style="background:#ff6b6b"></div>
+            <!-- ↑ 信号機ドット（赤）。styleで直接色指定 -->
+
+            <div class="ph-dot" style="background:#ffd93d"></div>
+            <!-- ↑ 信号機ドット（黄） -->
+
+            <div class="ph-dot" style="background:#6bcb77"></div>
+            <!-- ↑ 信号機ドット（緑） -->
+
+            <div class="ph-url"></div>
+            <!-- ↑ URLバー風の細長い帯 -->
+
+          </div>
+
+          <div class="ph-body">
+          <!-- ↑ ブラウザの本体部分（中身の偽コンテンツ） -->
+
+            <div class="ph-hero"><span class="ph-lbl">Inventory API</span></div>
+            <!-- ↑ ヒーロー風の帯 + プロジェクト名のラベル -->
+
+            <div class="ph-row"></div>
+            <!-- ↑ 長い横棒（テキスト風の飾り） -->
+
+            <div class="ph-row s"></div>
+            <!-- ↑ 短い横棒（sクラスで60%幅） -->
+
+            <div class="ph-cards">
+            <!-- ↑ 横並びカード3つの箱 -->
+
+              <div class="ph-card"></div>
+              <div class="ph-card"></div>
+              <div class="ph-card"></div>
+              <!-- ↑ 各カード（中身は空、色だけ） -->
+
+            </div>
+
+            <div class="ph-row xs"></div>
+            <!-- ↑ もっと短い横棒（xsクラスで38%幅） -->
+
+          </div>
+        </div>
+
+        <p class="cheki-label">01 — API</p>
+        <!-- ↑ チェキ下の小ラベル -->
+
+        <p class="cheki-title">Tidal — 在庫管理 API</p>
+        <!-- ↑ プロジェクトのタイトル -->
+
+        <div class="cheki-stk">
+        <!-- ↑ 技術スタックタグの並び -->
+
+          <span class="stk">Go</span>
+          <span class="stk">PostgreSQL</span>
+          <span class="stk">Redis</span>
+          <!-- ↑ 使用技術のタグ -->
+
+        </div>
+
+        <span class="cheki-arrow">↗</span>
+        <!-- ↑ 右下の矢印アイコン -->
+
+      </div>
+
+
+      <!-- 02 -->
+      <div class="cheki">
+      <!-- ↑ 2枚目のチェキ。構造は1枚目と同じ -->
+
+        <div class="cheki-tape"></div>
+
+        <div class="cheki-ph">
+          <div class="ph-bar">
+            <div class="ph-dot" style="background:#ff6b6b"></div>
+            <div class="ph-dot" style="background:#ffd93d"></div>
+            <div class="ph-dot" style="background:#6bcb77"></div>
+            <div class="ph-url"></div>
+          </div>
+
+          <div class="ph-body">
+            <div class="ph-hero"><span class="ph-lbl">Notification Hub</span></div>
+            <div class="ph-row s"></div>
+            <!-- ↑ 短い棒（バリエーション） -->
+
+            <div class="ph-row"></div>
+            <div class="ph-cards">
+              <div class="ph-card"></div>
+              <div class="ph-card"></div>
+              <!-- ↑ ここはカード2つ -->
+            </div>
+            <div class="ph-row xs"></div>
+          </div>
+        </div>
+
+        <p class="cheki-label">02 — Infra</p>
+        <p class="cheki-title">Drift — 通知基盤</p>
+
+        <div class="cheki-stk">
+          <span class="stk">Python</span>
+          <span class="stk">FastAPI</span>
+          <span class="stk">SQS</span>
+        </div>
+
+        <span class="cheki-arrow">↗</span>
+      </div>
+
+
+      <!-- 03 -->
+      <div class="cheki">
+      <!-- ↑ 3枚目のチェキ -->
+
+        <div class="cheki-tape"></div>
+
+        <div class="cheki-ph">
+          <div class="ph-bar">
+            <div class="ph-dot" style="background:#ff6b6b"></div>
+            <div class="ph-dot" style="background:#ffd93d"></div>
+            <div class="ph-dot" style="background:#6bcb77"></div>
+            <div class="ph-url"></div>
+          </div>
+
+          <div class="ph-body">
+            <div class="ph-hero"><span class="ph-lbl">Auth Service</span></div>
+            <div class="ph-row xs"></div>
+            <div class="ph-row"></div>
+            <div class="ph-cards">
+              <div class="ph-card"></div>
+              <div class="ph-card"></div>
+              <div class="ph-card"></div>
+            </div>
+            <div class="ph-row s"></div>
+          </div>
+        </div>
+
+        <p class="cheki-label">03 — Auth</p>
+        <p class="cheki-title">Shore — 認証サービス</p>
+
+        <div class="cheki-stk">
+          <span class="stk">TypeScript</span>
+          <span class="stk">Node.js</span>
+          <span class="stk">JWT</span>
+        </div>
+
+        <span class="cheki-arrow">↗</span>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- 区切り: Works -> Skills -->
+  <span class="wave-div">
+    <svg viewBox="0 0 1440 52" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" height="52">
+      <path d="M0,52 C400,0 1000,52 1440,12 L1440,52 Z" fill="#d6edf7"/>
+      <!-- ↑ fill色が違う（水色背景に合わせて） -->
+    </svg>
+  </span>
+
+
+  <!-- ===== SKILLS（スキル一覧） ===== -->
+  <section class="skills-wrap reveal" aria-label="Skills">
+
+    <div class="sec-title">
+      <i class="ti ti-stack-2" aria-hidden="true"></i>
+      <!-- ↑ スタック（積み重ね）アイコン -->
+
+      <h2>Skills</h2>
+    </div>
+
+    <div class="skills-grid">
+    <!-- ↑ スキルカードを並べるグリッド -->
+
+      <div class="sk">
+      <!-- ↑ 1個目：言語カテゴリ -->
+
+        <h3>Language</h3>
+        <!-- ↑ カテゴリ名（小見出し） -->
+
+        <div class="tags">
+        <!-- ↑ タグを並べる箱 -->
+
+          <span class="tg">Go</span>
+          <span class="tg">Python</span>
+          <span class="tg">TypeScript</span>
+          <!-- ↑ 各スキルタグ -->
+
+        </div>
+      </div>
+
+      <div class="sk">
+      <!-- ↑ 2個目：フレームワーク -->
+        <h3>Framework</h3>
+        <div class="tags">
+          <span class="tg">Gin</span>
+          <span class="tg">FastAPI</span>
+          <span class="tg">Node.js</span>
+        </div>
+      </div>
+
+      <div class="sk">
+      <!-- ↑ 3個目：データベース -->
+        <h3>Database</h3>
+        <div class="tags">
+          <span class="tg">PostgreSQL</span>
+          <span class="tg">Redis</span>
+          <span class="tg">MySQL</span>
+        </div>
+      </div>
+
+      <div class="sk">
+      <!-- ↑ 4個目：インフラ -->
+        <h3>Infra</h3>
+        <div class="tags">
+          <span class="tg">AWS</span>
+          <span class="tg">Docker</span>
+          <span class="tg">GitHub Actions</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- 区切り: Skills -> About -->
+  <span class="wave-div">
+    <svg viewBox="0 0 1440 52" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" height="52">
+      <path d="M0,0 C500,52 900,0 1440,38 L1440,0 Z" fill="#d6edf7"/>
+      <!-- ↑ 上下逆向きの波（pathの座標が違う） -->
+    </svg>
+  </span>
+
+
+  <!-- ===== ABOUT（自己紹介） ===== -->
+  <section class="about-wrap reveal" aria-label="About">
+
+    <div class="sec-title">
+      <i class="ti ti-user-circle" aria-hidden="true"></i>
+      <!-- ↑ ユーザーアイコン -->
+
+      <h2>About</h2>
+    </div>
+
+    <div class="about-grid">
+    <!-- ↑ 写真とテキストの2カラムを作る箱 -->
+
+      <div class="about-photo">
+      <!-- ↑ 左側：丸い写真 -->
+
+        <img src="profile2.jpg" alt="Tomohiro Suzuki">
+        <!-- ↑ 顔写真（CSSで丸く切り抜かれる） -->
+
+      </div>
+
+      <div class="about-text-block">
+      <!-- ↑ 右側：テキストエリア -->
+
+        <p class="about-name">Tomohiro Suzuki</p>
+        <!-- ↑ 名前 -->
+
+        <div class="about-body">
+        <!-- ↑ 経歴文章をまとめる箱 -->
+
+          <p>高校卒業後、製造業やホテル業で働き2023年よりHTML・CSS・JavaScript・Ruby on Railsをオンラインスクールで学び始め、IT業界に転職。</p>
+          <!-- ↑ 段落1 -->
+
+          <p>現在はバックエンド開発を中心にJava案件に参画中。</p>
+          <!-- ↑ 段落2 -->
+
+        </div>
+
+        <div class="about-meta">
+        <!-- ↑ 稼働条件・資格などのタグを並べる箱 -->
+
+          <span class="meta-tag">週5日稼働</span>
+          <span class="meta-tag">フルリモート可</span>
+          <span class="meta-tag">Java Programmer Silver SE 11</span>
+          <span class="meta-tag">ORACLE MASTER Silver SQL</span>
+          <span class="meta-tag">ORACLE MASTER Bronze DBA</span>
+          <!-- ↑ 各タグ。資格や稼働情報 -->
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+</main>
+<!-- ↑ メインコンテンツ終了 -->
+
+
+<!-- 区切り: About -> Contact -->
+<span class="wave-div">
+  <svg viewBox="0 0 1440 52" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" height="52">
+    <path d="M0,52 C360,0 1080,52 1440,16 L1440,52 Z" fill="#d6edf7"/>
+  </svg>
+</span>
+
+
+<!-- ===== CONTACT（フッター） ===== -->
+<footer class="contact-wrap reveal" aria-label="Contact">
+<!-- ↑ ページ末尾のフッター。連絡先を入れる -->
+
+  <div class="sec-title">
+    <i class="ti ti-mail" aria-hidden="true"></i>
+    <h2>Contacts</h2>
+  </div>
+
+  <div class="contact-row">
+  <!-- ↑ 連絡先アイコンを横並びにする箱 -->
+
+    <div class="contact-item">
+    <!-- ↑ 連絡先1：メール -->
+
+      <div class="c-icon-circle">
+      <!-- ↑ アイコンを囲む丸枠 -->
+
+        <i class="ti ti-mail" aria-hidden="true"></i>
+        <!-- ↑ メールアイコン -->
+
+      </div>
+
+      <p class="c-lbl">Email</p>
+      <!-- ↑ ラベル「Email」 -->
+
+      <a href="mailto:clalto31202@gmail.com">clalto31202@gmail.com</a>
+      <!-- ↑ メールアドレス。mailto:でクリックするとメーラーが開く -->
+
+    </div>
+
+    <div class="contact-item">
+    <!-- ↑ 連絡先2：GitHub -->
+
+      <div class="c-icon-circle">
+        <i class="ti ti-brand-github" aria-hidden="true"></i>
+      </div>
+
+      <p class="c-lbl">GitHub</p>
+
+      <a href="https://github.com/" target="_blank">github.com/tomo</a>
+      <!-- ↑ GitHubページへのリンク -->
+
+    </div>
+
+  </div>
+
+  <p class="copyright">©Tomohiro Suzuki</p>
+  <!-- ↑ 著作権表示 -->
+
+</footer>
+
+
+<script src="main.js"></script>
+<!-- ↑ JavaScriptを読み込み。bodyの最後に置くのがセオリー（HTMLが先に表示されるため） -->
+
+</body>
+</html>
