@@ -357,6 +357,13 @@ nav {
   gap: 30px;                                  /* カード間の隙間 */
 }
 
+/* チェキをリンクにする時のラッパー */
+.cheki-link {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+
 /* チェキ1枚 */
 .cheki {
   background: #fff;                /* 背景：白 */
