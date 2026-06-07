@@ -142,31 +142,6 @@ nav {
   z-index: 2;       /* 背景テキストより前面に */
 }
 
-/* タイトルの上の小さなタグ */
-.hero-tag {
-  font-family: 'DM Mono', monospace;       /* 等幅フォント */
-  font-size: 10px;                         /* 文字サイズ10px */
-  letter-spacing: 0.22em;                  /* 文字間隔広め */
-  color: #1a6a8a;                          /* 文字色：水色 */
-  text-transform: uppercase;               /* 大文字変換 */
-  margin-bottom: 24px;                     /* 下に24pxの余白 */
-  display: flex;                           /* 横線とテキストを横並びに */
-  align-items: center;                     /* 縦中央揃え */
-  gap: 12px;                               /* 横線とテキストの隙間 */
-  opacity: 0;                              /* 最初は透明 */
-  animation: fadeUp 0.8s 0.1s ease both;   /* 0.1秒後から0.8秒かけてフワッと出現 */
-  font-weight: 500;                        /* 文字の太さ */
-}
-
-/* タグの左に表示される短い横線（::beforeで作る） */
-.hero-tag::before {
-  content: '';            /* 中身は空でOK（線として表示するだけ） */
-  display: block;         /* ブロック要素として扱う */
-  width: 28px;            /* 横線の長さ */
-  height: 1px;            /* 線の太さ */
-  background: #1a6a8a;    /* 線の色 */
-}
-
 /* メインタイトル */
 .hero h1 {
   font-family: 'Cormorant Garamond', serif;  /* セリフ体 */
@@ -184,39 +159,6 @@ nav {
   font-style: italic;   /* 斜体 */
   color: #2a8aaa;       /* 斜体だけ違う色で目立たせる */
   font-weight: 300;     /* 細めに */
-}
-
-/* 説明文 */
-.hero-sub {
-  font-family: 'Inter', sans-serif;        /* サンセリフ体 */
-  font-weight: 400;                        /* 通常の太さ */
-  font-size: 14px;                         /* 文字サイズ */
-  color: #3a6a7a;                          /* 文字色：くすんだ水色 */
-  margin-top: 18px;                        /* 上に余白 */
-  line-height: 1.7;                        /* 読みやすい行間 */
-  max-width: 440px;                        /* 最大幅を制限して読みやすく */
-  opacity: 0;                              /* 最初は透明 */
-  animation: fadeUp 0.8s 0.4s ease both;   /* タイトルより遅れて出現 */
-}
-
-/* スキルタグ群 */
-.hero-meta {
-  display: flex;                            /* 横並び */
-  gap: 8px;                                 /* タグ同士の隙間 */
-  margin-top: 28px;                         /* 上に余白 */
-  flex-wrap: wrap;                          /* 入りきらない時は次の行に折り返す */
-  opacity: 0;                               /* 最初は透明 */
-  animation: fadeUp 0.8s 0.55s ease both;   /* さらに遅れて出現 */
-}
-
-.hero-meta span {
-  font-family: 'DM Mono', monospace;             /* 等幅フォント */
-  font-size: 9px;                                /* 小さめサイズ */
-  padding: 5px 11px;                             /* 内側の余白 */
-  border: 1px solid rgba(42, 122, 154, 0.3);     /* 半透明の枠線 */
-  color: #1a6a8a;                                /* 文字色：水色 */
-  letter-spacing: 0.05em;                        /* わずかに文字間隔広く */
-  background: #fff;                              /* 背景：白 */
 }
 
 /* ============================================
@@ -291,7 +233,7 @@ nav {
   background: #fff;                  /* 背景：白 */
   border-radius: 50%;                /* 円形 */
   top: 10%;                          /* 親の上から10%の位置 */
-  right: 14%;                        /* 親の右から14%の位置 */
+  right: 20%;                        /* 親の右から14%の位置 */
   box-shadow: 0 0 16px rgba(255, 255, 255, 0.9);  /* 周りがボワッと光る */
   opacity: 0;                        /* 最初は透明 */
   animation: shine 4s 1s ease-in-out infinite;    /* 4秒周期で無限に点滅 */
@@ -694,6 +636,7 @@ nav {
 /* ============================================
    CONTACT（連絡先・フッター）
    ============================================ */
+   
 .contact-wrap {
   background: #d6edf7;       /* 背景：水色 */
   padding: 60px 44px 56px;   /* 上60px・左右44px・下56px */
