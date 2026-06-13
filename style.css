@@ -294,9 +294,12 @@ nav {
 }
 
 .works-grid {
-  display: grid;                              /* Gridレイアウトを使う */
-  grid-template-columns: repeat(3, 1fr);      /* 3列・均等幅 */
-  gap: 30px;                                  /* カード間の隙間 */
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 30px;
+  max-width: 1200px;
+  margin: 0 auto;
+  align-items: start;
 }
 
 /* チェキをリンクにする時のラッパー */
@@ -308,14 +311,12 @@ nav {
 
 /* チェキ1枚 */
 .cheki {
-  background: #fff;                /* 背景：白 */
-  padding: 11px 11px 52px;         /* 下側だけ余白多め（文字スペース） */
-  cursor: pointer;                 /* マウスポインタが手の形に */
-  position: relative;              /* テープや矢印の配置基準 */
-  box-shadow: 2px 5px 18px rgba(30, 90, 120, 0.15), 0 0 0 0.5px rgba(30, 90, 120, 0.08);
-                                   /* 立体的な影 */
-  transition: transform 0.4s cubic-bezier(.2, .8, .3, 1.1), box-shadow 0.4s;
-                                   /* cubic-bezier：独自の動き方カーブ */
+  background: #fff;
+  padding: 15px 15px 40px 15px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
 /* :nth-child(N)：N番目の子要素を狙う */
@@ -353,45 +354,18 @@ nav {
 
 /* チェキ内のプレースホルダー画像エリア */
 .cheki-ph {
-  width: 100%;                  /* 横幅いっぱい */
-  aspect-ratio: 4/3;            /* 縦横比4:3 */
-  background: #d8eef7;          /* 背景：薄い水色 */
-  display: flex;                /* 中身を配置するため */
-  flex-direction: column;       /* 縦並びに */
-  overflow: hidden;             /* はみ出しを隠す */
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  margin-bottom: 20px;
+  overflow: hidden;
 }
 
-/* ブラウザ風のバー（赤・黄・緑の信号機ドット） */
-.ph-bar {
-  background: #2a8aaa;       /* 背景：水色 */
-  height: 18px;              /* バーの高さ */
-  display: flex;             /* 中身を横並びに */
-  align-items: center;       /* 縦中央 */
-  padding: 0 7px;            /* 左右に余白 */
-  gap: 4px;                  /* ドット間の隙間 */
-  flex-shrink: 0;            /* 縮まないようにする */
-}
-
-.ph-dot {
-  width: 5px;                /* 横幅 */
-  height: 5px;               /* 縦幅 */
-  border-radius: 50%;        /* 円形 */
-}
-
-.ph-url {
-  flex: 1;                              /* 余ったスペースを全部使う */
-  background: rgba(255, 255, 255, 0.22); /* 半透明の白 */
-  border-radius: 2px;                   /* わずかな角丸 */
-  height: 10px;                         /* 高さ */
-  margin: 0 5px;                        /* 左右に余白 */
-}
 
 .ph-body {
-  flex: 1;                  /* 残りの縦スペースを使う */
-  padding: 8px;             /* 内側余白 */
-  display: flex;            /* 中身を配置するため */
-  flex-direction: column;   /* 縦並びに */
-  gap: 5px;                 /* 各要素の隙間 */
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
 }
 
 .ph-hero {
